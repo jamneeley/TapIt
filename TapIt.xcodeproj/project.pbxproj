@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9D0C608120913E1C00BC49E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0C608020913E1C00BC49E2 /* AppDelegate.swift */; };
 		9D0C608320913E1C00BC49E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0C608220913E1C00BC49E2 /* ViewController.swift */; };
-		9D0C608620913E1C00BC49E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9D0C608420913E1C00BC49E2 /* Main.storyboard */; };
 		9D0C608820913E1D00BC49E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D0C608720913E1D00BC49E2 /* Assets.xcassets */; };
 		9D0C608B20913E1D00BC49E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9D0C608920913E1D00BC49E2 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -18,7 +17,6 @@
 		9D0C607D20913E1C00BC49E2 /* TapIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D0C608020913E1C00BC49E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9D0C608220913E1C00BC49E2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9D0C608520913E1C00BC49E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9D0C608720913E1D00BC49E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9D0C608A20913E1D00BC49E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9D0C608C20913E1D00BC49E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -55,13 +53,44 @@
 			isa = PBXGroup;
 			children = (
 				9D0C608020913E1C00BC49E2 /* AppDelegate.swift */,
+				9D0C609220913E2200BC49E2 /* Model */,
+				9D0C609320913E2700BC49E2 /* ModelController */,
+				9D0C609420913E3400BC49E2 /* ViewController */,
+				9D0C609520913E4B00BC49E2 /* Resources */,
+			);
+			path = TapIt;
+			sourceTree = "<group>";
+		};
+		9D0C609220913E2200BC49E2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9D0C609320913E2700BC49E2 /* ModelController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ModelController;
+			sourceTree = "<group>";
+		};
+		9D0C609420913E3400BC49E2 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		9D0C609520913E4B00BC49E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
 				9D0C608220913E1C00BC49E2 /* ViewController.swift */,
-				9D0C608420913E1C00BC49E2 /* Main.storyboard */,
 				9D0C608720913E1D00BC49E2 /* Assets.xcassets */,
 				9D0C608920913E1D00BC49E2 /* LaunchScreen.storyboard */,
 				9D0C608C20913E1D00BC49E2 /* Info.plist */,
 			);
-			path = TapIt;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,7 +153,6 @@
 			files = (
 				9D0C608B20913E1D00BC49E2 /* LaunchScreen.storyboard in Resources */,
 				9D0C608820913E1D00BC49E2 /* Assets.xcassets in Resources */,
-				9D0C608620913E1C00BC49E2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,14 +171,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9D0C608420913E1C00BC49E2 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9D0C608520913E1C00BC49E2 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		9D0C608920913E1D00BC49E2 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -282,7 +302,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9A24X3MLF7;
-				INFOPLIST_FILE = TapIt/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/TapIt/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -300,7 +320,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9A24X3MLF7;
-				INFOPLIST_FILE = TapIt/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/TapIt/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
