@@ -14,16 +14,15 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     let highScoresButton = UIButton()
     let scoreLabel = UILabel()
     let actionLabel = UILabel()
+    var globalTimer: Timer? = nil
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .gray
         setupObjects()
         let tap = UITapGestureRecognizer(target: self, action: #selector(wasTapped))
         tap.delegate = self
         view.addGestureRecognizer(tap)
-        
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(wasSwipped))
         swipe.delegate = self
         view.addGestureRecognizer(swipe)
@@ -66,8 +65,6 @@ extension MainViewController {
         setupHighScoreButton()
         setupScoreLabel()
         setupActionLabel()
-
-        
     }
 
     func setupImage() {
@@ -81,7 +78,6 @@ extension MainViewController {
         let blurEffect = UIBlurEffect(style: .regular)
         let blurEffextView = UIVisualEffectView(effect: blurEffect)
         blurEffextView.frame = view.bounds
-
         blurEffextView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(blurEffextView)
     }
@@ -95,21 +91,20 @@ extension MainViewController {
     
     func setupScoreLabel() {
         view.addSubview(scoreLabel)
-        scoreLabel.font = UIFont.boldSystemFont(ofSize: 35)
+        scoreLabel.font = UIFont.boldSystemFont(ofSize: 30)
         scoreLabel.text = "Score: "
         setupScoreLabelConstraints()
     }
 
-    
     func setupActionLabel() {
         view.addSubview(actionLabel)
         actionLabel.font = UIFont.boldSystemFont(ofSize: 50)
         actionLabel.textAlignment = .center
         setupActionLabelConstraints()
     }
-    
-
 }
+
+
     ///////////////////////////////////////////////////
     //MARK: - Setup Constraints
     ///////////////////////////////////////////////////
@@ -160,6 +155,12 @@ extension MainViewController {
 extension MainViewController {
     
     @objc func highScoreButtonTapped() {
+        let navigationController =  UINavigationController(rootViewController: ScoresTableViewController())
+        self.present(navigationController, animated: true, completion: nil)
+        
+        stopTimer()
+        actionLabel.text = ""
+        actionLabel.backgroundColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 0.0)
         
     }
     
@@ -173,7 +174,6 @@ extension MainViewController {
                 //Have the model create a new user, dismiss the view and start the timer
                 print(name)
                 self.startTimer()
-            
         }
         alert.addAction(notYet)
         alert.addAction(start)
@@ -185,8 +185,14 @@ extension MainViewController {
         startTimer()
     }
     
+    
     func startTimer() {
-        let _ = Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(randomAction), userInfo: nil, repeats: true)
+         globalTimer = Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(randomAction), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        globalTimer?.invalidate()
+        globalTimer = nil
     }
     
     
