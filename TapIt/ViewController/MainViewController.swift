@@ -8,25 +8,51 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     
     let imageViewOpacity = UIView()
     let highScoresButton = UIButton()
     let scoreLabel = UILabel()
     let actionLabel = UILabel()
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .gray
         setupObjects()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(wasTapped))
+        tap.delegate = self
+        view.addGestureRecognizer(tap)
+        
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(wasSwipped))
+        swipe.delegate = self
+        view.addGestureRecognizer(swipe)
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    @objc func wasTapped() {
+    print("Was tapped")
+    }
+    
+    @objc func wasSwipped() {
+        print("Was swipped")
+    }
+    
+    override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
+        print("started Shaking")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         startGameAlert()
     }
-    
 }
 ///////////////////////////////////////////////////
     //MARK: - Setup Objects
@@ -40,6 +66,7 @@ extension MainViewController {
         setupHighScoreButton()
         setupScoreLabel()
         setupActionLabel()
+
         
     }
 
@@ -80,6 +107,8 @@ extension MainViewController {
         actionLabel.textAlignment = .center
         setupActionLabelConstraints()
     }
+    
+
 }
     ///////////////////////////////////////////////////
     //MARK: - Setup Constraints
@@ -192,9 +221,9 @@ extension MainViewController {
     
     func changeActionLabelColor() {
         let randomNumber = CGFloat.random(Int: Colors.colorArray.count)
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 1.0, animations: {
             self.actionLabel.backgroundColor = Colors.colorArray[randomNumber]
-        }
+        })
     }
 }
 
@@ -203,5 +232,3 @@ extension CGFloat {
         return Int(arc4random_uniform(UInt32(int)))
     }
 }
-
-
