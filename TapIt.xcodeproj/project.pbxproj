@@ -15,6 +15,8 @@
 		9D0C609B209141DA00BC49E2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0C609A209141DA00BC49E2 /* MainViewController.swift */; };
 		9D0C609D209141E800BC49E2 /* ScoresTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0C609C209141E700BC49E2 /* ScoresTableViewController.swift */; };
 		9D0C609F209141F600BC49E2 /* ScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0C609E209141F600BC49E2 /* ScoreTableViewCell.swift */; };
+		9D0C60A120914BC400BC49E2 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 9D0C60A020914BC400BC49E2 /* Images */; };
+		9D0C60A3209151C800BC49E2 /* Extenstions in Resources */ = {isa = PBXBuildFile; fileRef = 9D0C60A2209151C800BC49E2 /* Extenstions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		9D0C609A209141DA00BC49E2 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9D0C609C209141E700BC49E2 /* ScoresTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoresTableViewController.swift; sourceTree = "<group>"; };
 		9D0C609E209141F600BC49E2 /* ScoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreTableViewCell.swift; sourceTree = "<group>"; };
+		9D0C60A020914BC400BC49E2 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
+		9D0C60A2209151C800BC49E2 /* Extenstions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Extenstions; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 		9D0C609520913E4B00BC49E2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9D0C60A2209151C800BC49E2 /* Extenstions */,
+				9D0C60A020914BC400BC49E2 /* Images */,
 				9D0C608720913E1D00BC49E2 /* Assets.xcassets */,
 				9D0C608920913E1D00BC49E2 /* LaunchScreen.storyboard */,
 				9D0C608C20913E1D00BC49E2 /* Info.plist */,
@@ -164,7 +170,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D0C608B20913E1D00BC49E2 /* LaunchScreen.storyboard in Resources */,
+				9D0C60A120914BC400BC49E2 /* Images in Resources */,
 				9D0C608820913E1D00BC49E2 /* Assets.xcassets in Resources */,
+				9D0C60A3209151C800BC49E2 /* Extenstions in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,6 +10,7 @@ import UIKit
 
 class MainViewController: UIViewController {
     
+    let imageViewOpacity = UIView()
     let highScoresButton = UIButton()
     let scoreLabel = UILabel()
     let actionLabel = UILabel()
@@ -20,32 +21,67 @@ class MainViewController: UIViewController {
         setupObjects()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        startGameAlert()
+    }
+    
+///////////////////////////////////////////////////
+    //MARK: - Setup Objects
+///////////////////////////////////////////////////
+    
     func setupObjects() {
+        setupImage()
+        setupBlurEffect()
         setupHighScoreButton()
         setupScoreLabel()
         setupActionLabel()
+        
+    }
+
+    func setupImage() {
+        let backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
+        backgroundImageView.image = UIImage(named: "backGroundImage")
+        backgroundImageView.contentMode = UIViewContentMode.scaleAspectFill
+        view.insertSubview(backgroundImageView, at: 0)
     }
     
-    
+    func setupBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .regular)
+        let blurEffextView = UIVisualEffectView(effect: blurEffect)
+        blurEffextView.frame = view.bounds
+
+        blurEffextView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(blurEffextView)
+    }
+
     func setupHighScoreButton() {
         view.addSubview(highScoresButton)
-        highScoresButton.backgroundColor = .yellow
+        highScoresButton.setImage(#imageLiteral(resourceName: "trophyButton.png"), for: .normal)
+        highScoresButton.addTarget(self, action: #selector(highScoreButtonTapped), for: .touchUpInside)
         setupHighScoreButtonConstraints()
     }
     
     func setupScoreLabel() {
         view.addSubview(scoreLabel)
-        scoreLabel.backgroundColor = .blue
+        scoreLabel.font = UIFont.boldSystemFont(ofSize: 35)
+        scoreLabel.text = "Score: "
         setupScoreLabelConstraints()
-        
     }
 
     
     func setupActionLabel() {
         view.addSubview(actionLabel)
-        actionLabel.backgroundColor = .red
+        actionLabel.font = UIFont.boldSystemFont(ofSize: 50)
+        actionLabel.backgroundColor = .random()
+        actionLabel.textAlignment = .center
+        actionLabel.text = "Tap It!"
         setupActionLabelConstraints()
     }
+    
+    ///////////////////////////////////////////////////
+    //MARK: - Setup Constraints
+    ///////////////////////////////////////////////////
     
     func setupHighScoreButtonConstraints() {
         highScoresButton.translatesAutoresizingMaskIntoConstraints = false
@@ -80,5 +116,55 @@ class MainViewController: UIViewController {
         NSLayoutConstraint(item: actionLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: view.frame.height / -2.5).isActive = true
         
         NSLayoutConstraint(item: actionLabel, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: view.frame.width / -10).isActive = true
+    }
+    
+    ///////////////////////////////////////////////////
+    //MARK: - local functions
+    ///////////////////////////////////////////////////
+    
+    @objc func highScoreButtonTapped() {
+        
+    }
+    
+    func startGameAlert() {
+        
+        let alert = UIAlertController(title: "Are You Ready To Begin?", message: nil, preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        let notYet = UIAlertAction(title: "Not Yet", style: .cancel, handler: nil)
+        let start = UIAlertAction(title: "Lets do it!", style: .default) { (success) in
+            guard let name = alert.textFields?.first?.text else {return}
+            
+            //Have the model create a new user, dismiss the view and start the timer
+        }
+        alert.addAction(notYet)
+        alert.addAction(start)
+        self.present(alert, animated: true)
+        startTimer()
+    }
+    
+    func startNewGame() {
+        startTimer()
+    }
+    
+    func startTimer() {
+        /*let _ = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(), userInfo: nil, repeats: true)
+ */
+        //what to do when the timer ticks??
+    }
+}
+
+
+extension CGFloat {
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    }
+}
+
+extension UIColor {
+    static func random() -> UIColor {
+        return UIColor(red:   .random(),
+                       green: .random(),
+                       blue:  .random(),
+                       alpha: 1.0)
     }
 }
