@@ -17,10 +17,11 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var globalTimer: Timer? = nil
     var randomNumber: Int?
-    var countDown = 12
     var score = 0
-    var gameActive = true
-
+    var name = ""
+    var success = false
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,15 +48,13 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func wasTapped() {
         guard let randomNumber = randomNumber else { return }
-        if gameActive {
+        if success == false {
             if randomNumber == 1 {
-                if countDown > 0 {
-                    print("User tapped correctly and in the correct amount of time")
-                    gameActive = true
-                    score += 1
-                    print(score)
-                    scoreLabel.text = "Score: \(score)"
-                }
+                print("User tapped correctly and in the correct amount of time")
+                success = true
+                score += 1
+                print(score)
+                scoreLabel.text = "Score: \(score)"
             } else {
                 userLost()
                 print("user didnt do the correct actions")
@@ -64,14 +63,12 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc func wasSwipped() {
-        if gameActive {
+        if success  ==  false {
             if randomNumber == 2 {
-                if countDown > 0 {
-                    print("User swipped correctly and in the correct amount of time")
-                    gameActive = true
-                    score += 1
-                    scoreLabel.text = "Score: \(score)"
-                }
+                print("User swipped correctly and in the correct amount of time")
+                success = true
+                score += 1
+                scoreLabel.text = "Score: \(score)"
             } else {
                 userLost()
                 print("user didnt do the correct actions")
@@ -80,14 +77,12 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
-        if gameActive {
+        if success == false{
             if randomNumber == 3 {
-                if countDown > 0 {
-                    print("User shaked correctly and in the correct amount of time")
-                    gameActive = true
-                    score += 1
-                    scoreLabel.text = "Score: \(score)"
-                }
+                print("User shaked correctly and in the correct amount of time")
+                success = true
+                score += 1
+                scoreLabel.text = "Score: \(score)"
             } else {
                 userLost()
                 print("user didnt do the correct actions")
@@ -102,9 +97,9 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
 }
 
 
-    ///////////////////////////////////////////////////
-    //MARK: - local functions
-    ///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+//MARK: - local functions
+///////////////////////////////////////////////////
 
 extension MainViewController {
     
@@ -112,80 +107,61 @@ extension MainViewController {
         let navigationController =  UINavigationController(rootViewController: ScoresTableViewController())
         self.present(navigationController, animated: true, completion: nil)
         score = 0
-        stopSession()
         actionLabel.text = ""
         actionLabel.backgroundColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 0.0)
-
-        
     }
     
     func startGameAlert() {
-        
         scoreLabel.text = "Score: \(score)"
         let alert = UIAlertController(title: "Are You Ready To Start?", message: nil, preferredStyle: .alert)
         alert.addTextField(configurationHandler: nil)
         let notYet = UIAlertAction(title: "Not Yet", style: .cancel, handler: nil)
-        let start = UIAlertAction(title: "Lets do it!", style: .default) { (nil) in
-                guard let name = alert.textFields?.first?.text else {return}
-                print(name)
-                self.startNewSession()
+        let start = UIAlertAction(title: "Start!", style: .default) { (_) in
+            guard let name = alert.textFields?.first?.text, !name.isEmpty else {return}
+            self.name = name
+            self.startNewSession()
         }
         alert.addAction(notYet)
         alert.addAction(start)
         self.present(alert, animated: true)
-        
     }
     
     func startNewSession() {
         randomAction()
-        countDown = 12
-        gameActive = true
         startTimer()
+        success = false
     }
     
     
     func startTimer() {
-        globalTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(counting), userInfo: nil, repeats: true)
+        globalTimer = Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(newSession), userInfo: nil, repeats: false)
     }
-    
-    func stopSession() {
-        globalTimer?.invalidate()
-        globalTimer = nil
-        countDown = 12
-    }
+
     
     func userLost() {
-        //save user score/ name to core data
-        stopSession()
-        gameActive = false
+        success = false
         let alert = UIAlertController(title: "You Died!", message: nil, preferredStyle: .alert)
         let goToScores = UIAlertAction(title: "See Scores", style: .default) { (segueToTB) in
-            //SAVE THE USER AND SCORE
+            UserController.shared.addUser(username: self.name, score: Int16(self.score))
             self.score = 0
             self.highScoreButtonTapped()
         }
         let playAgain = UIAlertAction(title: "Git Gud!", style: .default) { (segue) in
-            //SAVE THE USER AND SCORE
+            UserController.shared.addUser(username: self.name, score: Int16(self.score))
             self.score = 0
             self.startGameAlert()
         }
         alert.addAction(goToScores)
         alert.addAction(playAgain)
         self.present(alert, animated: true, completion: nil)
-   
     }
     
-    @objc func counting() {
-        if gameActive {
-            if countDown > 0 {
-                countDown -= 1
-            } else if countDown == 0 && gameActive == true {
-                stopSession()
-                startNewSession()
-            } else if countDown == 0 && gameActive == false {
-                
-                userLost()
-            }
+    @objc func newSession() {
+        print("timer fired")
+        if success == false {
+            userLost()
+        } else {
+            startNewSession()
         }
     }
     
