@@ -11,10 +11,20 @@ import UIKit
 class ScoresTableViewController: UITableViewController {
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let backButton = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(dismissView))
         self.navigationItem.setLeftBarButton(backButton, animated: true)
+        setupTableViewImage()
+
+    }
+    //MARK: VIEWS
+    func setupTableViewImage(){
+        let trophyBackgroundImageView = UIImageView(frame: UIScreen.main.bounds)
+        trophyBackgroundImageView.image = UIImage(named: "trophy")
+        trophyBackgroundImageView.contentMode = UIViewContentMode.scaleAspectFill
+        view.insertSubview(trophyBackgroundImageView, at: 0)
     }
     
     @objc func dismissView() {
@@ -26,12 +36,25 @@ class ScoresTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return UserController.shared.users.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
+        let username = UserController.shared.users[indexPath.row]
+        
+        cell.textLabel?.text = username.username
+        cell.detailTextLabel?.text = String(username.score)
+        
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            let userToDelete = UserController.shared.users[indexPath.row]
+            UserController.shared.delete(user: userToDelete)
+            //maybe need to reload tableview
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
