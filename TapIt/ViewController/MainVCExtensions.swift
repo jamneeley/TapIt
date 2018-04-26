@@ -46,7 +46,7 @@ extension MainViewController {
     
     func setupScoreLabel() {
         view.addSubview(scoreLabel)
-        scoreLabel.font = UIFont.boldSystemFont(ofSize: 30)
+        scoreLabel.font = UIFont.boldSystemFont(ofSize: 25)
         scoreLabel.text = "Score: "
         setupScoreLabelConstraints()
     }
@@ -84,7 +84,7 @@ extension MainViewController {
         
         NSLayoutConstraint(item: scoreLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: view.frame.height / 10).isActive = true
         
-        NSLayoutConstraint(item: scoreLabel, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: view.frame.width / 4).isActive = true
+        NSLayoutConstraint(item: scoreLabel, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1.0, constant: view.frame.width / 3).isActive = true
     }
     
     

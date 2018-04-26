@@ -14,9 +14,13 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     let highScoresButton = UIButton()
     let scoreLabel = UILabel()
     let actionLabel = UILabel()
+    
     var globalTimer: Timer? = nil
     var randomNumber: Int?
     var countDown = 12
+    var score = 0
+    var gameActive = true
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,37 +42,56 @@ class MainViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     
+    // USER ACTIONS /////////////////////////////
+    
+    
     @objc func wasTapped() {
         guard let randomNumber = randomNumber else { return }
-        if randomNumber == 1 {
-            print("User tapped correctly")
-            startTimer()
-            randomAction()
-        } else {
-            stopGame()
-            print("user didnt do the correct actions")
+        if gameActive {
+            if randomNumber == 1 {
+                if countDown > 0 {
+                    print("User tapped correctly and in the correct amount of time")
+                    gameActive = true
+                    score += 1
+                    print(score)
+                    scoreLabel.text = "Score: \(score)"
+                }
+            } else {
+                userLost()
+                print("user didnt do the correct actions")
+            }
         }
     }
     
     @objc func wasSwipped() {
-        if randomNumber == 2 {
-            print("User Swipped")
-            startTimer()
-            randomAction()
-        } else {
-            stopGame()
-            print("user didnt do the correct actions")
+        if gameActive {
+            if randomNumber == 2 {
+                if countDown > 0 {
+                    print("User swipped correctly and in the correct amount of time")
+                    gameActive = true
+                    score += 1
+                    scoreLabel.text = "Score: \(score)"
+                }
+            } else {
+                userLost()
+                print("user didnt do the correct actions")
+            }
         }
     }
     
     override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
-        if randomNumber == 3 {
-            print("User Shaked it")
-            startTimer()
-            randomAction()
-        } else {
-            stopGame()
-            print("user didnt do the correct actions")
+        if gameActive {
+            if randomNumber == 3 {
+                if countDown > 0 {
+                    print("User shaked correctly and in the correct amount of time")
+                    gameActive = true
+                    score += 1
+                    scoreLabel.text = "Score: \(score)"
+                }
+            } else {
+                userLost()
+                print("user didnt do the correct actions")
+            }
         }
     }
     
@@ -88,23 +111,24 @@ extension MainViewController {
     @objc func highScoreButtonTapped() {
         let navigationController =  UINavigationController(rootViewController: ScoresTableViewController())
         self.present(navigationController, animated: true, completion: nil)
-        
-        stopGame()
+        score = 0
+        stopSession()
         actionLabel.text = ""
         actionLabel.backgroundColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 0.0)
+
         
     }
     
     func startGameAlert() {
         
+        scoreLabel.text = "Score: \(score)"
         let alert = UIAlertController(title: "Are You Ready To Start?", message: nil, preferredStyle: .alert)
         alert.addTextField(configurationHandler: nil)
         let notYet = UIAlertAction(title: "Not Yet", style: .cancel, handler: nil)
         let start = UIAlertAction(title: "Lets do it!", style: .default) { (nil) in
                 guard let name = alert.textFields?.first?.text else {return}
-                //Have the model create a new user, dismiss the view and start the timer
                 print(name)
-                self.startNewGame()
+                self.startNewSession()
         }
         alert.addAction(notYet)
         alert.addAction(start)
@@ -112,29 +136,56 @@ extension MainViewController {
         
     }
     
-    func startNewGame() {
+    func startNewSession() {
         randomAction()
         countDown = 12
+        gameActive = true
         startTimer()
     }
     
     
     func startTimer() {
-        globalTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(counting), userInfo: nil, repeats: true)
+        globalTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(counting), userInfo: nil, repeats: true)
     }
     
-    func stopGame() {
+    func stopSession() {
         globalTimer?.invalidate()
         globalTimer = nil
         countDown = 12
     }
     
+    func userLost() {
+        //save user score/ name to core data
+        stopSession()
+        gameActive = false
+        let alert = UIAlertController(title: "You Died!", message: nil, preferredStyle: .alert)
+        let goToScores = UIAlertAction(title: "See Scores", style: .default) { (segueToTB) in
+            //SAVE THE USER AND SCORE
+            self.score = 0
+            self.highScoreButtonTapped()
+        }
+        let playAgain = UIAlertAction(title: "Git Gud!", style: .default) { (segue) in
+            //SAVE THE USER AND SCORE
+            self.score = 0
+            self.startGameAlert()
+        }
+        alert.addAction(goToScores)
+        alert.addAction(playAgain)
+        self.present(alert, animated: true, completion: nil)
+   
+    }
+    
     @objc func counting() {
-        print(countDown)
-        if countDown > 0 {
-            countDown -= 1
-        } else if countDown == 0 {
-            stopGame()
+        if gameActive {
+            if countDown > 0 {
+                countDown -= 1
+            } else if countDown == 0 && gameActive == true {
+                stopSession()
+                startNewSession()
+            } else if countDown == 0 && gameActive == false {
+                
+                userLost()
+            }
         }
     }
     
@@ -175,8 +226,6 @@ extension MainViewController {
         })
     }
 }
-
-//made a change again
 
 extension CGFloat {
     static func random(Int int: Int) -> Int {
