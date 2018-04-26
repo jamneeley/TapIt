@@ -14,6 +14,7 @@ class MainViewController: UIViewController {
     let highScoresButton = UIButton()
     let scoreLabel = UILabel()
     let actionLabel = UILabel()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,18 +129,20 @@ class MainViewController: UIViewController {
     
     func startGameAlert() {
         
-        let alert = UIAlertController(title: "Are You Ready To Begin?", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Are You Ready To Start?", message: nil, preferredStyle: .alert)
         alert.addTextField(configurationHandler: nil)
         let notYet = UIAlertAction(title: "Not Yet", style: .cancel, handler: nil)
-        let start = UIAlertAction(title: "Lets do it!", style: .default) { (success) in
-            guard let name = alert.textFields?.first?.text else {return}
+        let start = UIAlertAction(title: "Lets do it!", style: .default) { (nil) in
+                guard let name = alert.textFields?.first?.text else {return}
+                //Have the model create a new user, dismiss the view and start the timer
+                print(name)
+                self.startTimer()
             
-            //Have the model create a new user, dismiss the view and start the timer
         }
         alert.addAction(notYet)
         alert.addAction(start)
         self.present(alert, animated: true)
-        startTimer()
+        
     }
     
     func startNewGame() {
@@ -147,9 +150,20 @@ class MainViewController: UIViewController {
     }
     
     func startTimer() {
-        /*let _ = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(), userInfo: nil, repeats: true)
- */
+        let _ = Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(randomAction), userInfo: nil, repeats: true)
         //what to do when the timer ticks??
+    }
+    
+    @objc func randomAction() {
+        let randomNumber = Int(arc4random_uniform(3) + 1)
+        if randomNumber == 1 {
+            actionLabel.text = "Tap It!"
+        } else if randomNumber == 2 {
+            actionLabel.text = "Swipe It!"
+        } else {
+            actionLabel.text = "Shake It!"
+        }
+        print("\(randomNumber)")
     }
 }
 
