@@ -27,9 +27,12 @@ class MainViewController: UIViewController {
         startGameAlert()
     }
     
+}
 ///////////////////////////////////////////////////
     //MARK: - Setup Objects
 ///////////////////////////////////////////////////
+
+extension MainViewController {
     
     func setupObjects() {
         setupImage()
@@ -74,15 +77,15 @@ class MainViewController: UIViewController {
     func setupActionLabel() {
         view.addSubview(actionLabel)
         actionLabel.font = UIFont.boldSystemFont(ofSize: 50)
-        actionLabel.backgroundColor = .random()
         actionLabel.textAlignment = .center
-        actionLabel.text = "Tap It!"
         setupActionLabelConstraints()
     }
-    
+}
     ///////////////////////////////////////////////////
     //MARK: - Setup Constraints
     ///////////////////////////////////////////////////
+
+extension MainViewController {
     
     func setupHighScoreButtonConstraints() {
         highScoresButton.translatesAutoresizingMaskIntoConstraints = false
@@ -118,10 +121,14 @@ class MainViewController: UIViewController {
         
         NSLayoutConstraint(item: actionLabel, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: view.frame.width / -10).isActive = true
     }
-    
+}
+
+
     ///////////////////////////////////////////////////
     //MARK: - local functions
     ///////////////////////////////////////////////////
+
+extension MainViewController {
     
     @objc func highScoreButtonTapped() {
         
@@ -151,34 +158,50 @@ class MainViewController: UIViewController {
     
     func startTimer() {
         let _ = Timer.scheduledTimer(timeInterval: 1.2, target: self, selector: #selector(randomAction), userInfo: nil, repeats: true)
-        //what to do when the timer ticks??
     }
     
+    
+    //this is where we need to call the observer for wether tap shake or swipe happened
     @objc func randomAction() {
         let randomNumber = Int(arc4random_uniform(3) + 1)
         if randomNumber == 1 {
             actionLabel.text = "Tap It!"
         } else if randomNumber == 2 {
             actionLabel.text = "Swipe It!"
-        } else {
+        } else  if randomNumber == 3 {
             actionLabel.text = "Shake It!"
         }
-        print("\(randomNumber)")
+        transformActionLabelScale()
+        changeActionLabelColor()
+    }
+    
+    func transformActionLabelScale() {
+        let animationX = CABasicAnimation(keyPath: "transform.scale.x")
+        animationX.duration = 0.1
+        animationX.repeatCount = 1
+        animationX.fromValue = 1
+        animationX.toValue = 1.1
+        let animationY = CABasicAnimation(keyPath: "transform.scale.y")
+        animationY.duration = 0.1
+        animationY.repeatCount = 1
+        animationY.fromValue = 1
+        animationY.toValue = 1.1
+        actionLabel.layer.add(animationX, forKey: "Xtransform")
+        actionLabel.layer.add(animationY, forKey: "YTransform")
+    }
+    
+    func changeActionLabelColor() {
+        let randomNumber = CGFloat.random(Int: Colors.colorArray.count)
+        UIView.animate(withDuration: 0.5) {
+            self.actionLabel.backgroundColor = Colors.colorArray[randomNumber]
+        }
     }
 }
-
 
 extension CGFloat {
-    static func random() -> CGFloat {
-        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    static func random(Int int: Int) -> Int {
+        return Int(arc4random_uniform(UInt32(int)))
     }
 }
 
-extension UIColor {
-    static func random() -> UIColor {
-        return UIColor(red:   .random(),
-                       green: .random(),
-                       blue:  .random(),
-                       alpha: 1.0)
-    }
-}
+
